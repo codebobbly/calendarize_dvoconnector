@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HDNET\Autoloader\Utility\ArrayUtility;
 use HDNET\Autoloader\Utility\ModelUtility;
-use RGU\CalendarizeRgdvoconnector\Domain\Model\Event;
+use RGU\CalendarizeDvoconnector\Domain\Model\Event;
 
 $base = ModelUtility::getTcaInformation(Event::class);
 

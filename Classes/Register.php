@@ -2,11 +2,11 @@
 /**
  * Register options
  *
- * @package RGU\CalendarizeRgdvoconnector
+ * @package RGU\CalendarizeDvoconnector
  * @author  rguttroff.de
  */
 
-namespace RGU\CalendarizeRgdvoconnector;
+namespace RGU\CalendarizeDvoconnector;
 
 /**
  * Register options
@@ -40,11 +40,11 @@ class Register
     public static function getConfiguration()
     {
         return [
-            'uniqueRegisterKey' => 'Rgdvoconnector',
-            'title'             => 'Rgdvoconnector Event',
-            'modelName'         => \RGU\CalendarizeRgdvoconnector\Domain\Model\Event::class,
-            'partialIdentifier' => 'Rgdvoconnector',
-            'tableName'         => 'tx_calendarizergdvoconnector_domain_model_event',
+            'uniqueRegisterKey' => 'Dvoconnector',
+            'title'             => 'Dvoconnector Event',
+            'modelName'         => \RGU\CalendarizeDvoconnector\Domain\Model\Event::class,
+            'partialIdentifier' => 'Dvoconnector',
+            'tableName'         => 'tx_calendarizeDvoconnector_domain_model_event',
             'required'          => false,
         ];
     }

@@ -5,7 +5,7 @@
  * @author  rguttroff.de
  */
 
-namespace RGU\CalendarizeRgdvoconnector\Command;
+namespace RGU\CalendarizeDvoconnector\Command;
 
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 
@@ -19,7 +19,7 @@ class CleanupEventsCommandController extends AbstractCommandController {
   /**
    * Event repository.
    *
-   * @var \RGU\CalendarizeRgdvoconnector\Domain\Repository\EventRepository
+   * @var \RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
    */
   protected $eventRepository;
 
@@ -29,7 +29,7 @@ class CleanupEventsCommandController extends AbstractCommandController {
   public function fullCleanupCommand() {
 
     $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-    $this->eventRepository = $objectManager->get(\RGU\CalendarizeRgdvoconnector\Domain\Repository\EventRepository::class);
+    $this->eventRepository = $objectManager->get(\RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository::class);
 
     $events = $this->eventRepository->findAll();
     foreach($events as $event) {

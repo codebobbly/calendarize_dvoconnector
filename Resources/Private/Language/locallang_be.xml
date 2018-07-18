@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
     <meta type="array">
-        <description>language labels for Calendarize-Rgdvoconnector</description>
+        <description>language labels for Calendarize-Dvoconnector</description>
         <type>module</type>
         <csh_table></csh_table>
-        <fileId>EXT:calendarize_rgdvoconnector/Resources/Private/Language/locallang_be.xml</fileId>
+        <fileId>EXT:calendarize_Dvoconnector/Resources/Private/Language/locallang_be.xml</fileId>
 		<labelContext type="array">
         </labelContext>
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
-          <label index="calendarize_rgdvoconnector_config">DVO Kalender - Konfiguration</label>
+          <label index="calendarize_Dvoconnector_config">DVO Kalender - Konfiguration</label>
           <label index="config">Konfiguration</label>
           <label index="config.sheet_selection">Auswahl</label>
           <label index="config.title">Titel</label>
@@ -27,7 +27,7 @@
         <languageKey index="dk" type="array">
         </languageKey>
         <languageKey index="de" type="array">
-            <label index="calendarize_rgdvoconnector_config">DVO Kalender - Konfiguration</label>
+            <label index="calendarize_Dvoconnector_config">DVO Kalender - Konfiguration</label>
             <label index="config">Konfiguration</label>
             <label index="config.title">Titel</label>
             <label index="config.sheet_selection">Auswahl</label>

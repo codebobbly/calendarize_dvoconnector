@@ -5,16 +5,16 @@
  * @author rguttroff.de
  */
 
-namespace RGU\CalendarizeRgdvoconnector\Command;
+namespace RGU\CalendarizeDvoconnector\Command;
 
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use HDNET\Calendarize\Service\IndexerService;
-use RGU\CalendarizeRgdvoconnector\Domain\Model\Config;
-use RGU\Rgdvoconnector\Domain\Filter\EventsFilter;
-use RGU\Rgdvoconnector\Service\GenericApiService;
+use RGU\CalendarizeDvoconnector\Domain\Model\Config;
+use RGU\Dvoconnector\Domain\Filter\EventsFilter;
+use RGU\Dvoconnector\Service\GenericApiService;
 
 /**
  * Import
@@ -25,28 +25,28 @@ class FullEventsUpdateCommandController extends AbstractCommandController {
 
   /**
    * configRepository
-   * @var RGU\CalendarizeRgdvoconnector\Domain\Repository\ConfigRepository
+   * @var RGU\CalendarizeDvoconnector\Domain\Repository\ConfigRepository
    * @inject
    */
   protected $configRepository;
 
   /**
    * eventRepository
-   * @var RGU\CalendarizeRgdvoconnector\Domain\Repository\EventRepository
+   * @var RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
    * @inject
    */
   protected $eventRepository;
 
   /**
    * associationRepository
-   * @var RGU\Rgdvoconnector\Domain\Repository\AssociationRepository
+   * @var RGU\Dvoconnector\Domain\Repository\AssociationRepository
    * @inject
    */
   protected $dvoAssociationRepository;
 
   /**
    * eventRepository
-   * @var RGU\Rgdvoconnector\Domain\Repository\EventRepository
+   * @var RGU\Dvoconnector\Domain\Repository\EventRepository
    * @inject
    */
   protected $dvoEventRepository;
@@ -65,7 +65,7 @@ class FullEventsUpdateCommandController extends AbstractCommandController {
 
     GenericApiService::disableCache();
 
-    $pluginConfiguration = \RGU\CalendarizeRgdvoconnector\Register::getConfiguration();
+    $pluginConfiguration = \RGU\CalendarizeDvoconnector\Register::getConfiguration();
 
     $this->indexRepository->setIndexTypes([$pluginConfiguration['uniqueRegisterKey']]);
 

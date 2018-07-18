@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace RGU\CalendarizeRgdvoconnector\Slots;
+namespace RGU\CalendarizeDvoconnector\Slots;
 
-use RGU\CalendarizeRgdvoconnector\Command\AbstractCommandController;
-use RGU\CalendarizeRgdvoconnector\Domain\Model\Event;
+use RGU\CalendarizeDvoconnector\Command\AbstractCommandController;
+use RGU\CalendarizeDvoconnector\Domain\Model\Event;
 use HDNET\Calendarize\Domain\Model\Configuration;
 use HDNET\Calendarize\Utility\DateTimeUtility;
 /**
@@ -19,7 +19,7 @@ class EventHandler {
     /**
      * Event repository.
      *
-     * @var \RGU\CalendarizeRgdvoconnector\Domain\Repository\EventRepository
+     * @var \RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
      */
     protected $eventRepository;
 
@@ -29,7 +29,7 @@ class EventHandler {
      * Run the import.
      *
      * @param string                                $pid
-     * @param \RGU\Rgdvoconnector\Domain\Model\Event $dvoEvent
+     * @param \RGU\Dvoconnector\Domain\Model\Event $dvoEvent
      * @param AbstractCommandController             $commandController
      * @param bool                                  $handled
      *
@@ -66,8 +66,8 @@ class EventHandler {
      * Run the update.
      *
      * @param string                                           $pid
-     * @param \RGU\Rgdvoconnector\Domain\Model\Event            $dvoEvent
-     * @param \RGU\CalendarizeRgdvoconnector\Domain\Model\Event $event
+     * @param \RGU\Dvoconnector\Domain\Model\Event            $dvoEvent
+     * @param \RGU\CalendarizeDvoconnector\Domain\Model\Event $event
      * @param AbstractCommandController                        $commandController
      * @param bool                                             $handled
      *
@@ -99,7 +99,7 @@ class EventHandler {
      * Run the delete.
      *
      * @param string                                           $pid
-     * @param \RGU\CalendarizeRgdvoconnector\Domain\Model\Event $event
+     * @param \RGU\CalendarizeDvoconnector\Domain\Model\Event $event
      * @param AbstractCommandController                        $commandController
      * @param bool                                             $handled
      *
@@ -168,8 +168,8 @@ class EventHandler {
      * Get the right event object (or a new one).
      *
      * @param string                                           $pid
-     * @param \RGU\Rgdvoconnector\Domain\Model\Event            $dvoEvent
-     * @param \RGU\CalendarizeRgdvoconnector\Domain\Model\Event $event
+     * @param \RGU\Dvoconnector\Domain\Model\Event            $dvoEvent
+     * @param \RGU\CalendarizeDvoconnector\Domain\Model\Event $event
      *
      * @return Event
      */
@@ -211,14 +211,14 @@ class EventHandler {
     /**
      * Get the event repository
      *
-     * @return \RGU\CalendarizeRgdvoconnector\Domain\Repository\EventRepository
+     * @return \RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
      */
     protected function getEventRepository() {
 
       if(!$this->eventRepository) {
 
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->eventRepository = $objectManager->get(\RGU\CalendarizeRgdvoconnector\Domain\Repository\EventRepository::class);
+        $this->eventRepository = $objectManager->get(\RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository::class);
 
       }
 

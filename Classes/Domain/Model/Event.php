@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace RGU\CalendarizeRgdvoconnector\Domain\Model;
+namespace RGU\CalendarizeDvoconnector\Domain\Model;
 /** copyright notice **/
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use HDNET\Calendarize\Features\FeedInterface;
@@ -39,20 +39,20 @@ class Event extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements Fe
 
 	/**
 	 * AssociationRepository
-	 * @var \RGU\Rgdvoconnector\Domain\Repository\AssociationRepository
+	 * @var \RGU\Dvoconnector\Domain\Repository\AssociationRepository
 	 */
 	protected $associationRepository;
 
 	/**
 	 * EventRepository
-	 * @var \RGU\Rgdvoconnector\Domain\Repository\EventRepository
+	 * @var \RGU\Dvoconnector\Domain\Repository\EventRepository
 	 */
 	protected $eventRepository;
 
 	/**
 	 * Configs.
 	 *
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RGU\CalendarizeRgdvoconnector\Domain\Model\Config>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\RGU\CalendarizeDvoconnector\Domain\Model\Config>
 	 * @db text
 	 * @lazy
 	 */
@@ -173,13 +173,13 @@ class Event extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements Fe
 	/**
    * return the orginal association
    *
-   * @return RGU\Rgdvoconnector\Domain\Model\Association
+   * @return RGU\Dvoconnector\Domain\Model\Association
    */
   public function getAssociation() {
 
 		if(!$this->associationRepository) {
 			$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-			$this->associationRepository = $objectManager->get(\RGU\Rgdvoconnector\Domain\Repository\AssociationRepository::class);
+			$this->associationRepository = $objectManager->get(\RGU\Dvoconnector\Domain\Repository\AssociationRepository::class);
 		}
 
     return $this->associationRepository->findByID($this->getDVOAssociationID());
@@ -189,7 +189,7 @@ class Event extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements Fe
 	/**
    * return the orginal event
    *
-   * @return RGU\Rgdvoconnector\Domain\Model\Event
+   * @return RGU\Dvoconnector\Domain\Model\Event
    */
   public function getEvent() {
 
@@ -198,7 +198,7 @@ class Event extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements Fe
 
 			if(!$this->eventRepository) {
 				$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-				$this->eventRepository = $objectManager->get(\RGU\Rgdvoconnector\Domain\Repository\EventRepository::class);
+				$this->eventRepository = $objectManager->get(\RGU\Dvoconnector\Domain\Repository\EventRepository::class);
 			}
 
 	    return $this->eventRepository->findByAssociationAndID($association, $this->getDVOEventID());

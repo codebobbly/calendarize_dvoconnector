@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace RGU\CalendarizeRgdvoconnector\Domain\Model;
+namespace RGU\CalendarizeDvoconnector\Domain\Model;
 /** copyright notice **/
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 

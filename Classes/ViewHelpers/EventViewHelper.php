@@ -1,7 +1,7 @@
 <?php
 
-namespace RGU\CalendarizeRgdvoconnector\ViewHelpers;
+namespace RGU\CalendarizeDvoconnector\ViewHelpers;
 
-class EventViewHelper extends \RGU\Rgdvoconnector\ViewHelpers\EventViewHelper {
+class EventViewHelper extends \RGU\Dvoconnector\ViewHelpers\EventViewHelper {
 
 }

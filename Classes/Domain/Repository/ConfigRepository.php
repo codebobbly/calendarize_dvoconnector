@@ -1,5 +1,5 @@
 <?php
-namespace RGU\CalendarizeRgdvoconnector\Domain\Repository;
+namespace RGU\CalendarizeDvoconnector\Domain\Repository;
 
 class ConfigRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 

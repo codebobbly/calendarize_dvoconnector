@@ -1,11 +1,11 @@
 {
-  "name": "RGU/calendarize-rgdvoconnector",
+  "name": "RGU/calendarize-Dvoconnector",
   "version": "1.0.1",
   "type": "typo3-cms-extension",
-  "description": "Integrate Rgdvoconnector with Calendarize",
+  "description": "Integrate Dvoconnector with Calendarize",
   "autoload": {
     "psr-4": {
-      "RGU\\CalendarizeRgdvoconnector\\": "Classes/"
+      "RGU\\CalendarizeDvoconnector\\": "Classes/"
     }
   },
   "keywords": [
@@ -24,7 +24,7 @@
   "require": {
     "typo3/cms-core": ">=7.6.0",
     "lochmueller/calendarize": "~3.1.1",
-    "RGU/Rgdvoconnector": ">=1.0.0",
+    "RGU/Dvoconnector": ">=1.0.0",
     "lochmueller/autoloader": "~3.0.0||~4.0.0||~5.0.0"
   }
 }
