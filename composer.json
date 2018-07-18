@@ -24,7 +24,7 @@
   ],
   "require": {
     "typo3/cms-core": ">=7.6.0",
-    "lochmueller/calendarize": "~3.1.1",
+    "lochmueller/calendarize": ">=3.1.1",
     "rgu/dvoconnector": ">=1.0.0"
   },
   "require-dev": {
