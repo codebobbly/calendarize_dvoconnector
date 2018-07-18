@@ -4,7 +4,6 @@
  *
  * @author  rguttroff.de
  */
-
 namespace RGU\CalendarizeDvoconnector\Command;
 
 use RGU\CalendarizeDvoconnector\Domain\Model\Config;
@@ -15,7 +14,8 @@ use RGU\Dvoconnector\Domain\Filter\EventsFilter;
  *
  * @author rguttroff.de
  */
-class CurrentEventsUpdateCommandController extends FullEventsUpdateCommandController {
+class CurrentEventsUpdateCommandController extends FullEventsUpdateCommandController
+{
 
   /**
    * Get Filter for Events
@@ -23,15 +23,13 @@ class CurrentEventsUpdateCommandController extends FullEventsUpdateCommandContro
    *
    * @return EventsFilter
    */
-  protected function getEventsFilter($config) {
+    protected function getEventsFilter($config)
+    {
+        $filter = parent::getEventsFilter($config);
 
-    $filter = parent::getEventsFilter($config);
+        $startDate = new \DateTime('now');
+        $filter->setStartDate($startDate);
 
-    $startDate = new \DateTime("now");
-    $filter->setStartDate($startDate);
-
-    return $filter;
-
-  }
-
+        return $filter;
+    }
 }

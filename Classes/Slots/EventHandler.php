@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace RGU\CalendarizeDvoconnector\Slots;
 
-use RGU\CalendarizeDvoconnector\Command\AbstractCommandController;
-use RGU\CalendarizeDvoconnector\Domain\Model\Event;
 use HDNET\Calendarize\Domain\Model\Configuration;
 use HDNET\Calendarize\Utility\DateTimeUtility;
+use RGU\CalendarizeDvoconnector\Command\AbstractCommandController;
+use RGU\CalendarizeDvoconnector\Domain\Model\Event;
+
 /**
  * Import default events.
  */
-class EventHandler {
+class EventHandler
+{
 
     /**
      * Event repository.
@@ -23,7 +25,9 @@ class EventHandler {
      */
     protected $eventRepository;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Run the import.
@@ -37,29 +41,28 @@ class EventHandler {
      *
      * @return array
      */
-    public function importCommand($pid, $dvoEvent, $commandController, $handled) {
+    public function importCommand($pid, $dvoEvent, $commandController, $handled)
+    {
+        $eventRepository = $this->getEventRepository();
 
-      $eventRepository = $this->getEventRepository();
+        $event = new Event();
+        $event->setPid($pid);
+        $event->setDVOAssociationID($dvoEvent->getAssociation()->getID());
+        $event->setDVOEventID($dvoEvent->getID());
 
-      $event = new Event();
-      $event->setPid($pid);
-      $event->setDVOAssociationID($dvoEvent->getAssociation()->getID());
-      $event->setDVOEventID($dvoEvent->getID());
+        $event = $this->fillEventData($pid, $dvoEvent, $event);
 
-      $event = $this->fillEventData($pid, $dvoEvent, $event);
+        $eventRepository->add($event);
 
-      $eventRepository->add($event);
+        $commandController->enqueueMessage('Add Event: ' . $event->getDVOAssociationID() . '|' . $event->getDVOEventID(), 'Event');
 
-      $commandController->enqueueMessage('Add Event: ' . $event->getDVOAssociationID() . '|' . $event->getDVOEventID(), 'Event');
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
+        $persistenceManager->persistAll();
 
-      $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-      $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
-      $persistenceManager->persistAll();
+        $handled = true;
 
-      $handled = true;
-
-      return ['pid' => $pid, 'dvoEvent' => $dvoEvent, 'commandController' => $commandController, 'handled' => $handled ];
-
+        return ['pid' => $pid, 'dvoEvent' => $dvoEvent, 'commandController' => $commandController, 'handled' => $handled ];
     }
 
     /**
@@ -75,25 +78,23 @@ class EventHandler {
      *
      * @return array
      */
-    public function updateCommand($pid, $dvoEvent, $event, $commandController, $handled) {
+    public function updateCommand($pid, $dvoEvent, $event, $commandController, $handled)
+    {
+        $eventRepository = $this->getEventRepository();
 
-      $eventRepository = $this->getEventRepository();
+        $event = $this->fillEventData($pid, $dvoEvent, $event);
 
-      $event = $this->fillEventData($pid, $dvoEvent, $event);
+        $eventRepository->update($event);
 
-      $eventRepository->update($event);
+        $commandController->enqueueMessage('Update Event Meta data: ' . $event->getDVOAssociationID() . '|' . $event->getDVOEventID(), 'Event');
 
-      $commandController->enqueueMessage('Update Event Meta data: ' . $event->getDVOAssociationID() . '|' . $event->getDVOEventID(), 'Event');
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
+        $persistenceManager->persistAll();
+        $handled = true;
 
-      $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-      $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
-      $persistenceManager->persistAll();
-      $handled = true;
-
-      return ['pid' => $pid, 'dvoEvent' => $dvoEvent, 'event' => $event, 'commandController' => $commandController, 'handled' => $handled ];
-
+        return ['pid' => $pid, 'dvoEvent' => $dvoEvent, 'event' => $event, 'commandController' => $commandController, 'handled' => $handled ];
     }
-
 
     /**
      * Run the delete.
@@ -107,21 +108,20 @@ class EventHandler {
      *
      * @return array
      */
-    public function deleteCommand($pid, $event, $commandController, $handled) {
+    public function deleteCommand($pid, $event, $commandController, $handled)
+    {
+        $eventRepository = $this->getEventRepository();
 
-      $eventRepository = $this->getEventRepository();
+        $commandController->enqueueMessage('Delete Event: ' . $event->getDVOAssociationID() . '|' . $event->getDVOEventID(), 'Event');
 
-      $commandController->enqueueMessage('Delete Event: ' . $event->getDVOAssociationID() . '|' . $event->getDVOEventID(), 'Event');
+        $eventRepository->remove($event);
 
-      $eventRepository->remove($event);
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
+        $persistenceManager->persistAll();
+        $handled = true;
 
-      $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-      $persistenceManager = $objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
-      $persistenceManager->persistAll();
-      $handled = true;
-
-      return ['pid' => $pid, 'event' => $event, 'commandController' => $commandController, 'handled' => $handled ];
-
+        return ['pid' => $pid, 'event' => $event, 'commandController' => $commandController, 'handled' => $handled ];
     }
 
     /**
@@ -134,34 +134,31 @@ class EventHandler {
      *
      * @return Configuration
      */
-    protected function updateConfiguration($configuration, $startDate, $endDate = null) {
+    protected function updateConfiguration($configuration, $startDate, $endDate = null)
+    {
+        $configuration->setType(Configuration::TYPE_TIME);
+        $configuration->setFrequency(Configuration::FREQUENCY_NONE);
+        $configuration->setAllDay(true);
 
-      $configuration->setType(Configuration::TYPE_TIME);
-      $configuration->setFrequency(Configuration::FREQUENCY_NONE);
-      $configuration->setAllDay(true);
+        $startTime = clone $startDate;
+        $configuration->setStartDate(DateTimeUtility::resetTime($startDate));
 
-      $startTime = clone $startDate;
-      $configuration->setStartDate(DateTimeUtility::resetTime($startDate));
-
-      if($endDate) {
-        $endTime = clone $endDate;
-        $configuration->setEndDate(DateTimeUtility::resetTime($endDate));
-      }
-
-      $startTime = DateTimeUtility::getDaySecondsOfDateTime($startTime);
-      if ($startTime > 0) {
-
-        $configuration->setStartTime($startTime);
-
-        if($endTime) {
-          $configuration->setEndTime(DateTimeUtility::getDaySecondsOfDateTime($endTime));
+        if ($endDate) {
+            $endTime = clone $endDate;
+            $configuration->setEndDate(DateTimeUtility::resetTime($endDate));
         }
 
-        $configuration->setAllDay(false);
+        $startTime = DateTimeUtility::getDaySecondsOfDateTime($startTime);
+        if ($startTime > 0) {
+            $configuration->setStartTime($startTime);
 
-      }
-      return $configuration;
+            if ($endTime) {
+                $configuration->setEndTime(DateTimeUtility::getDaySecondsOfDateTime($endTime));
+            }
 
+            $configuration->setAllDay(false);
+        }
+        return $configuration;
     }
 
     /**
@@ -173,39 +170,31 @@ class EventHandler {
      *
      * @return Event
      */
-    protected function fillEventData($pid, $dvoEvent, $event) {
+    protected function fillEventData($pid, $dvoEvent, $event)
+    {
+        $configurations = $event->getCalendarize();
 
-      $configurations = $event->getCalendarize();
+        // Check, is any configuration
+        if ($configurations->count() == 0) {
+            $configuration = new Configuration();
+            $configuration->setPid($pid);
 
-      // Check, is any configuration
-      if($configurations->count() == 0) {
-
-        $configuration = new Configuration();
-        $configuration->setPid($pid);
-
-        $configurations->attach($configuration);
-
-      }
-
-      $firsttime = true;
-      foreach ($configurations as $configuration) {
-
-        if($firsttime) {
-
-          $this->updateConfiguration($configuration, $dvoEvent->getStartDate(), $dvoEvent->getEndDate());
-          $firsttime = false;
-
-        } else {
-
-          // It ist only one configuration allowed
-          $configurations->detach($configuration);
-
+            $configurations->attach($configuration);
         }
 
-      }
+        $firsttime = true;
+        foreach ($configurations as $configuration) {
+            if ($firsttime) {
+                $this->updateConfiguration($configuration, $dvoEvent->getStartDate(), $dvoEvent->getEndDate());
+                $firsttime = false;
+            } else {
 
-      return $event;
+          // It ist only one configuration allowed
+                $configurations->detach($configuration);
+            }
+        }
 
+        return $event;
     }
 
     /**
@@ -213,17 +202,13 @@ class EventHandler {
      *
      * @return \RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
      */
-    protected function getEventRepository() {
+    protected function getEventRepository()
+    {
+        if (!$this->eventRepository) {
+            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+            $this->eventRepository = $objectManager->get(\RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository::class);
+        }
 
-      if(!$this->eventRepository) {
-
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->eventRepository = $objectManager->get(\RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository::class);
-
-      }
-
-      return $this->eventRepository;
-
+        return $this->eventRepository;
     }
-
 }
