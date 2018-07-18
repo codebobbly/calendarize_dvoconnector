@@ -14,11 +14,12 @@
     "DVO Connector",
     "Extbase"
   ],
+  "homepage": "https://github.com/codebobbly/calendarize_dvoconnector",
   "authors": [
     {
-      "name": "Rainer Guttroff",
+      "name": "codebobbly",
       "role": "Developer",
-      "homepage": "http://rguttroff.de"
+      "homepage": "https://github.com/codebobbly"
     }
   ],
   "require": {
