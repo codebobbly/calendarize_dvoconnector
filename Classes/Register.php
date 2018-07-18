@@ -2,10 +2,8 @@
 /**
  * Register options
  *
- * @package RGU\CalendarizeDvoconnector
  * @author  rguttroff.de
  */
-
 namespace RGU\CalendarizeDvoconnector;
 
 /**
@@ -13,7 +11,6 @@ namespace RGU\CalendarizeDvoconnector;
  *
  * @author rguttroff.de
  */
-
 class Register
 {
 
