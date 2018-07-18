@@ -2,6 +2,6 @@
 
 namespace RGU\CalendarizeDvoconnector\ViewHelpers;
 
-class EventViewHelper extends \RGU\Dvoconnector\ViewHelpers\EventViewHelper {
-
+class EventViewHelper extends \RGU\Dvoconnector\ViewHelpers\EventViewHelper
+{
 }

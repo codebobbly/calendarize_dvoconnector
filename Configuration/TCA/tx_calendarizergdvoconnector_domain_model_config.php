@@ -19,14 +19,14 @@ $custom = [
         ],
         'dvo_association_id' => [
             'label' => 'LLL:EXT:calendarize_dvoconnector/Resources/Private/Language/locallang_be.xlf:config.DVOAssociationID',
-						'config' => [
+                        'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'size' => 10,
                 'minitems' => '1',
                 'maxitems' => '1',
                 'items' => [],
-                'itemsProcFunc' => \RGU\CalendarizeDvoconnector\Service\PluginConfigurationService::class.'->addConfigAssociation',
+                'itemsProcFunc' => \RGU\CalendarizeDvoconnector\Service\PluginConfigurationService::class . '->addConfigAssociation',
                 'enableMultiSelectFilterTextfield' => true,
             ],
         ],

@@ -4,150 +4,136 @@
  *
  * @author rguttroff.de
  */
-
 namespace RGU\CalendarizeDvoconnector\Command;
 
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use HDNET\Calendarize\Service\IndexerService;
 use RGU\CalendarizeDvoconnector\Domain\Model\Config;
 use RGU\Dvoconnector\Domain\Filter\EventsFilter;
 use RGU\Dvoconnector\Service\GenericApiService;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
  * Import
  *
  * @author rguttroff.de
  */
-class FullEventsUpdateCommandController extends AbstractCommandController {
+class FullEventsUpdateCommandController extends AbstractCommandController
+{
 
   /**
    * configRepository
    * @var RGU\CalendarizeDvoconnector\Domain\Repository\ConfigRepository
    * @inject
    */
-  protected $configRepository;
+    protected $configRepository;
 
-  /**
-   * eventRepository
-   * @var RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
-   * @inject
-   */
-  protected $eventRepository;
+    /**
+     * eventRepository
+     * @var RGU\CalendarizeDvoconnector\Domain\Repository\EventRepository
+     * @inject
+     */
+    protected $eventRepository;
 
-  /**
-   * associationRepository
-   * @var RGU\Dvoconnector\Domain\Repository\AssociationRepository
-   * @inject
-   */
-  protected $dvoAssociationRepository;
+    /**
+     * associationRepository
+     * @var RGU\Dvoconnector\Domain\Repository\AssociationRepository
+     * @inject
+     */
+    protected $dvoAssociationRepository;
 
-  /**
-   * eventRepository
-   * @var RGU\Dvoconnector\Domain\Repository\EventRepository
-   * @inject
-   */
-  protected $dvoEventRepository;
+    /**
+     * eventRepository
+     * @var RGU\Dvoconnector\Domain\Repository\EventRepository
+     * @inject
+     */
+    protected $dvoEventRepository;
 
-  /**
-   * The index repository.
-   * @var \HDNET\Calendarize\Domain\Repository\IndexRepository
-   * @inject
-   */
-  protected $indexRepository;
+    /**
+     * The index repository.
+     * @var \HDNET\Calendarize\Domain\Repository\IndexRepository
+     * @inject
+     */
+    protected $indexRepository;
 
-  /**
-   * Import command
-   */
-  public function importCommand() {
+    /**
+     * Import command
+     */
+    public function importCommand()
+    {
+        GenericApiService::disableCache();
 
-    GenericApiService::disableCache();
+        $pluginConfiguration = \RGU\CalendarizeDvoconnector\Register::getConfiguration();
 
-    $pluginConfiguration = \RGU\CalendarizeDvoconnector\Register::getConfiguration();
+        $this->indexRepository->setIndexTypes([$pluginConfiguration['uniqueRegisterKey']]);
 
-    $this->indexRepository->setIndexTypes([$pluginConfiguration['uniqueRegisterKey']]);
+        $eventsInSystem = [];
+        $eventsInCloud = [];
 
-    $eventsInSystem = [];
-    $eventsInCloud = [];
+        foreach ($this->configRepository->findAll() as $config) {
+            $association = $this->dvoAssociationRepository->findByID($config->getDVOAssociationID());
+            if ($association) {
+                $eventFilter = $this->getEventsFilter($config);
+                $pid = $config->getEventStorage();
 
-    foreach($this->configRepository->findAll() as $config) {
+                $eventsInSystem[$pid] = $eventsInSystem[$pid] || [];
 
-      $association = $this->dvoAssociationRepository->findByID($config->getDVOAssociationID());
-      if($association) {
+                $this->indexRepository->setOverridePageIds([$pid]);
 
-        $eventFilter = $this->getEventsFilter($config);
-        $pid = $config->getEventStorage();
+                $indices = $this->indexRepository->findBySearch($eventFilter->getStartDate(), $eventFilter->getEndDate());
+                foreach ($indices as $entry) {
+                    $event = $entry->getOriginalObject();
+                    if ($event) {
+                        $eventsInSystem[$pid][$event->getDVOEventID()] = $event;
+                    }
+                }
 
-        $eventsInSystem[$pid] = $eventsInSystem[$pid] || [];
-
-        $this->indexRepository->setOverridePageIds([$pid]);
-
-        $indices = $this->indexRepository->findBySearch($eventFilter->getStartDate(), $eventFilter->getEndDate());
-        foreach($indices as $entry) {
-
-          $event = $entry->getOriginalObject();
-          if($event) {
-            $eventsInSystem[$pid][$event->getDVOEventID()] = $event;
-          }
-
+                $events = $this->dvoEventRepository->findEventsByAssociation($association, $eventFilter);
+                $eventList = $events->getEvents();
+                foreach ($eventList as $event) {
+                    $eventsInCloud[$event->getID()] = $event;
+                }
+            } else {
+                $this->enqueueMessage('Aassociation ' . $config->getDVOAssociationID() . ' not found!', 'Error', FlashMessage::ERROR);
+            }
         }
 
-        $events = $this->dvoEventRepository->findEventsByAssociation($association, $eventFilter);
-        $eventList = $events->getEvents();
-        foreach($eventList as $event) {
+        GenericApiService::enableCache();
 
-          $eventsInCloud[$event->getID()] = $event;
+        // Search for Events with an old start/enddate
+        // All deleted Events can only be found by fullupdate
+        foreach ($eventsInCloud as $eid => $event) {
+            foreach ($eventsInSystem as $pid => $events) {
+                $this->eventRepository->setOverridePageIds([$pid]);
 
+                if (!array_key_exists($eid, $events)) {
+                    $eventsInSystem[$pid][$eid] = $this->eventRepository->findByDVOEventID($eid);
+                }
+            }
         }
 
-      } else {
-        $this->enqueueMessage('Aassociation '. $config->getDVOAssociationID() .' not found!', 'Error', FlashMessage::ERROR);
-      }
+        $this->enqueueMessage('Found ' . count($eventsInSystem) . ' events in the given calendar (System)', 'Items', FlashMessage::INFO);
+        $this->enqueueMessage('Found ' . count($eventsInCloud) . ' events in the given calendar (Cloud)', 'Items', FlashMessage::INFO);
 
-    }
+        /** @var Dispatcher $signalSlotDispatcher */
+        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
 
-    GenericApiService::enableCache();
+        $this->enqueueMessage('Send the ' . __CLASS__ . '::importCommand signal for each event.', 'Signal', FlashMessage::INFO);
+        $this->enqueueMessage('Send the ' . __CLASS__ . '::deleteCommand signal for each event.', 'Signal', FlashMessage::INFO);
+        $this->enqueueMessage('Send the ' . __CLASS__ . '::updateCommand signal for each event.', 'Signal', FlashMessage::INFO);
 
-    // Search for Events with an old start/enddate
-    // All deleted Events can only be found by fullupdate
-    foreach($eventsInCloud as $eid => $event) {
-      foreach($eventsInSystem as $pid => $events) {
+        $eventIDsForDelete = [];
 
-        $this->eventRepository->setOverridePageIds([$pid]);
-
-        if(!array_key_exists($eid, $events)) {
-          $eventsInSystem[$pid][$eid] = $this->eventRepository->findByDVOEventID($eid);
+        foreach ($eventsInSystem as $pid => $events) {
+            $eventIDsForDelete[$pid] = array_keys($events);
         }
 
-      }
-    }
-
-    $this->enqueueMessage('Found ' . count($eventsInSystem) . ' events in the given calendar (System)', 'Items', FlashMessage::INFO);
-    $this->enqueueMessage('Found ' . count($eventsInCloud) . ' events in the given calendar (Cloud)', 'Items', FlashMessage::INFO);
-
-    /** @var Dispatcher $signalSlotDispatcher */
-    $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
-
-    $this->enqueueMessage('Send the ' . __CLASS__ . '::importCommand signal for each event.', 'Signal', FlashMessage::INFO);
-    $this->enqueueMessage('Send the ' . __CLASS__ . '::deleteCommand signal for each event.', 'Signal', FlashMessage::INFO);
-    $this->enqueueMessage('Send the ' . __CLASS__ . '::updateCommand signal for each event.', 'Signal', FlashMessage::INFO);
-
-    $eventIDsForDelete = [];
-
-    foreach($eventsInSystem as $pid => $events) {
-      $eventIDsForDelete[$pid] = array_keys($events);
-    }
-
-    foreach($eventsInCloud as $eid => $dvoEvent) {
-
-      foreach($eventsInSystem as $pid => $events) {
-
-        $event = $events[$eid];
-        if($event) {
-
-          $arguments = [
+        foreach ($eventsInCloud as $eid => $dvoEvent) {
+            foreach ($eventsInSystem as $pid => $events) {
+                $event = $events[$eid];
+                if ($event) {
+                    $arguments = [
             'pid'               => $pid,
             'dvoEvent'          => $dvoEvent,
             'event'             => $event,
@@ -155,67 +141,55 @@ class FullEventsUpdateCommandController extends AbstractCommandController {
             'handled'           => false
           ];
 
-          $signalSlotDispatcher->dispatch(__CLASS__, 'updateCommand', $arguments);
-
-        } else {
-
-          $arguments = [
+                    $signalSlotDispatcher->dispatch(__CLASS__, 'updateCommand', $arguments);
+                } else {
+                    $arguments = [
             'pid'               => $pid,
             'dvoEvent'          => $dvoEvent,
             'commandController' => $this,
             'handled'           => false
           ];
 
-          $signalSlotDispatcher->dispatch(__CLASS__, 'importCommand', $arguments);
+                    $signalSlotDispatcher->dispatch(__CLASS__, 'importCommand', $arguments);
+                }
 
+                $eventIDsForDelete[$pid] = array_diff($eventIDsForDelete[$pid], [$eid]);
+            }
         }
 
-        $eventIDsForDelete[$pid] = array_diff($eventIDsForDelete[$pid], [$eid]);
-
-      }
-
-    }
-
-    foreach($eventIDsForDelete as $pid => $events) {
-      foreach($events as $eid) {
-
-        $event = $eventsInSystem[$pid][$eid];
-        if($event) {
-
-          $arguments = [
+        foreach ($eventIDsForDelete as $pid => $events) {
+            foreach ($events as $eid) {
+                $event = $eventsInSystem[$pid][$eid];
+                if ($event) {
+                    $arguments = [
             'pid'               => $pid,
             'event'             => $event,
             'commandController' => $this,
             'handled'           => false
           ];
 
-          $signalSlotDispatcher->dispatch(__CLASS__, 'deleteCommand', $arguments);
-
+                    $signalSlotDispatcher->dispatch(__CLASS__, 'deleteCommand', $arguments);
+                }
+            }
         }
 
-      }
+        $indexer = $this->objectManager->get(IndexerService::class);
+        $indexer->reindexAll();
     }
 
-    $indexer = $this->objectManager->get(IndexerService::class);
-    $indexer->reindexAll();
+    /**
+     * Get Filter for Events
+     * @param Config $config
+     *
+     * @return EventsFilter
+     */
+    protected function getEventsFilter($config)
+    {
+        $filter = new EventsFilter();
+        $filter->setPrivateEvents($config->getFilterPrivateEvents());
+        $filter->setChilds($config->getFilterChilds());
+        $filter->setInsideAssociationID($config->getDVOAssociationID());
 
-  }
-
-  /**
-   * Get Filter for Events
-   * @param Config $config
-   *
-   * @return EventsFilter
-   */
-   protected function getEventsFilter($config) {
-
-     $filter = new EventsFilter();
-     $filter->setPrivateEvents($config->getFilterPrivateEvents());
-     $filter->setChilds($config->getFilterChilds());
-     $filter->setInsideAssociationID($config->getDVOAssociationID());
-
-     return $filter;
-
-   }
-
+        return $filter;
+    }
 }
