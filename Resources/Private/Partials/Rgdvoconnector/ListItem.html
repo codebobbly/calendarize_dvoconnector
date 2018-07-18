@@ -1,0 +1,36 @@
+{namespace c=HDNET\Calendarize\ViewHelpers}
+{namespace n=RG\CalendarizeRgdvoconnector\ViewHelpers}
+
+<n:event associationId="{index.originalObject.dvoAssociationId}" eventId="{index.originalObject.dvoEventId}">
+	<div class="list-group-item">
+		<p class="list-group-item-text"> </p>
+		<dl class="dl-horizontal">
+			<dt>Name</dt>
+				<dd><c:link.index index="{index}"><f:render partial="{index.configuration.partialIdentifier}/Title" arguments="{index: index, event: event}" /></c:link.index></dd>
+			<dt>Beginn</dt>
+				<dd>
+					<f:if condition="{index.state}=='canceled'">
+						<f:then>
+							<f:translate key="canceled" />
+						</f:then>
+						<f:else>
+							<f:render partial="DateInformation" arguments="{index: index}"/>
+						</f:else>
+					</f:if>
+				</dd>
+			<dt>Beschreibung</dt>
+			<dd>
+				<f:format.crop maxCharacters="180" append="&nbsp;[...]">
+					<f:format.stripTags>{event.description}</f:format.stripTags>
+				</f:format.crop>
+			</dd>
+			<dt>Adresse</dt>
+				<dd>{event.address.zipcode} {event.address.location}, {event.address.street}</dd>
+			<dt>Kategorie</dt>
+				<dd>
+					<span class="label label-primary">{event.type.name}</span>&nbsp;
+				</dd>
+		</dl>
+		<p></p>
+	</div>
+</n:event>

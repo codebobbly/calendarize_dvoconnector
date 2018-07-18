@@ -1,0 +1,10 @@
+/**
+ * Configuration
+ */
+plugin.tx_calendarize {
+	view {
+		partialRootPaths {
+			65 = EXT:calendarize_rgdvoconnector/Resources/Private/Partials/
+		}
+	}
+}
