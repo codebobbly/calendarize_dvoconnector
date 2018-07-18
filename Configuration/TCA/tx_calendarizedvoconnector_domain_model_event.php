@@ -11,6 +11,7 @@ $base = ModelUtility::getTcaInformation(Event::class);
 $custom = [
     'ctrl' => [
         'hideTable' => true,
+        'title' => 'LLL:EXT:calendarize_dvoconnector/Resources/Private/Language/locallang_be.xlf:events',
     ],
 ];
 

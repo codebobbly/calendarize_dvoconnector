@@ -11,6 +11,7 @@
     <data type="array">
         <languageKey index="default" type="array">
           <label index="calendarize_dvoconnector_config">DVO Kalender - Konfiguration</label>
+          <label index="events">Veranstaltungen</label>
           <label index="config">Konfiguration</label>
           <label index="config.sheet_selection">Auswahl</label>
           <label index="config.title">Titel</label>
@@ -28,6 +29,7 @@
         </languageKey>
         <languageKey index="de" type="array">
             <label index="calendarize_dvoconnector_config">DVO Kalender - Konfiguration</label>
+            <label index="events">Veranstaltungen</label>
             <label index="config">Konfiguration</label>
             <label index="config.title">Titel</label>
             <label index="config.sheet_selection">Auswahl</label>

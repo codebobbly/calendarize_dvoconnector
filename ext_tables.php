@@ -9,7 +9,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-\HDNET\Autoloader\Loader::extTables('RG', 'calendarize_dvoconnector', \RGU\CalendarizeDvoconnector\Register::getAutoloaderConfiguration());
+\HDNET\Autoloader\Loader::extTables('RGU', 'calendarize_dvoconnector', \RGU\CalendarizeDvoconnector\Register::getAutoloaderConfiguration());
 \HDNET\Calendarize\Register::extTables(\RGU\CalendarizeDvoconnector\Register::getConfiguration());
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_calendarize_dvoconnector_domain_model_config');

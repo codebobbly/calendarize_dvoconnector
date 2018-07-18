@@ -37,10 +37,10 @@ class Register
     public static function getConfiguration()
     {
         return [
-            'uniqueRegisterKey' => 'Dvoconnector',
+            'uniqueRegisterKey' => 'dvoconnector',
             'title'             => 'Dvoconnector Event',
             'modelName'         => \RGU\CalendarizeDvoconnector\Domain\Model\Event::class,
-            'partialIdentifier' => 'Dvoconnector',
+            'partialIdentifier' => 'dvoconnector',
             'tableName'         => 'tx_calendarizedvoconnector_domain_model_event',
             'required'          => false,
         ];
