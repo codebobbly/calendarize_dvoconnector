@@ -1,5 +1,5 @@
 <?php
-namespace RG\CalendarizeRgdvoconnector\Service;
+namespace RGU\CalendarizeRgdvoconnector\Service;
 
-class PluginConfigurationService extends \RG\Rgdvoconnector\Service\PluginConfigurationService {
+class PluginConfigurationService extends \RGU\Rgdvoconnector\Service\PluginConfigurationService {
 }

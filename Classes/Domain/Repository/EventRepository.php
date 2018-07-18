@@ -1,7 +1,7 @@
 <?php
-namespace RG\CalendarizeRgdvoconnector\Domain\Repository;
+namespace RGU\CalendarizeRgdvoconnector\Domain\Repository;
 
-use RG\CalendarizeRgdvoconnector\Domain\Model\Event;
+use RGU\CalendarizeRgdvoconnector\Domain\Model\Event;
 
 class EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 

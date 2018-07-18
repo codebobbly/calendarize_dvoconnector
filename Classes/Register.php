@@ -2,11 +2,11 @@
 /**
  * Register options
  *
- * @package RG\CalendarizeRgdvoconnector
+ * @package RGU\CalendarizeRgdvoconnector
  * @author  rguttroff.de
  */
 
-namespace RG\CalendarizeRgdvoconnector;
+namespace RGU\CalendarizeRgdvoconnector;
 
 /**
  * Register options
@@ -42,7 +42,7 @@ class Register
         return [
             'uniqueRegisterKey' => 'Rgdvoconnector',
             'title'             => 'Rgdvoconnector Event',
-            'modelName'         => \RG\CalendarizeRgdvoconnector\Domain\Model\Event::class,
+            'modelName'         => \RGU\CalendarizeRgdvoconnector\Domain\Model\Event::class,
             'partialIdentifier' => 'Rgdvoconnector',
             'tableName'         => 'tx_calendarizergdvoconnector_domain_model_event',
             'required'          => false,

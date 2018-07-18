@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace RG\CalendarizeRgdvoconnector\Command;
+namespace RGU\CalendarizeRgdvoconnector\Command;
 
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;

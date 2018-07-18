@@ -5,10 +5,10 @@
  * @author  rguttroff.de
  */
 
-namespace RG\CalendarizeRgdvoconnector\Command;
+namespace RGU\CalendarizeRgdvoconnector\Command;
 
-use RG\CalendarizeRgdvoconnector\Domain\Model\Config;
-use RG\Rgdvoconnector\Domain\Filter\EventsFilter;
+use RGU\CalendarizeRgdvoconnector\Domain\Model\Config;
+use RGU\Rgdvoconnector\Domain\Filter\EventsFilter;
 
 /**
  * Import

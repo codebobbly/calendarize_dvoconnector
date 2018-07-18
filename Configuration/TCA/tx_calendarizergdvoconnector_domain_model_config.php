@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use HDNET\Autoloader\Utility\ArrayUtility;
 use HDNET\Autoloader\Utility\ModelUtility;
-use RG\CalendarizeRgdvoconnector\Domain\Model\Config;
+use RGU\CalendarizeRgdvoconnector\Domain\Model\Config;
 
 $base = ModelUtility::getTcaInformation(Config::class);
 
@@ -26,7 +26,7 @@ $custom = [
                 'minitems' => '1',
                 'maxitems' => '1',
                 'items' => [],
-                'itemsProcFunc' => \RG\CalendarizeRgdvoconnector\Service\PluginConfigurationService::class.'->addConfigAssociation',
+                'itemsProcFunc' => \RGU\CalendarizeRgdvoconnector\Service\PluginConfigurationService::class.'->addConfigAssociation',
                 'enableMultiSelectFilterTextfield' => true,
             ],
         ],

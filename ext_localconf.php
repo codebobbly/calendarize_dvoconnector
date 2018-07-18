@@ -15,46 +15,46 @@ if (!defined('TYPO3_MODE')) {
 \HDNET\Autoloader\Loader::extLocalconf(
     'RG',
     'calendarize_rgdvoconnector',
-    \RG\CalendarizeRgdvoconnector\Register::getAutoloaderConfiguration()
+    \RGU\CalendarizeRgdvoconnector\Register::getAutoloaderConfiguration()
 );
-\HDNET\Calendarize\Register::extLocalconf(\RG\CalendarizeRgdvoconnector\Register::getConfiguration());
+\HDNET\Calendarize\Register::extLocalconf(\RGU\CalendarizeRgdvoconnector\Register::getConfiguration());
 
-$eventHandler = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\RG\CalendarizeRgdvoconnector\Slots\EventHandler::class);
+$eventHandler = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\RGU\CalendarizeRgdvoconnector\Slots\EventHandler::class);
 
 $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
 $signalSlotDispatcher->connect(
-    \RG\CalendarizeRgdvoconnector\Command\FullEventsUpdateCommandController::class,
+    \RGU\CalendarizeRgdvoconnector\Command\FullEventsUpdateCommandController::class,
     'importCommand',
     $eventHandler,
     'importCommand'
 );
 $signalSlotDispatcher->connect(
-    \RG\CalendarizeRgdvoconnector\Command\FullEventsUpdateCommandController::class,
+    \RGU\CalendarizeRgdvoconnector\Command\FullEventsUpdateCommandController::class,
     'deleteCommand',
     $eventHandler,
     'deleteCommand'
 );
 $signalSlotDispatcher->connect(
-    \RG\CalendarizeRgdvoconnector\Command\FullEventsUpdateCommandController::class,
+    \RGU\CalendarizeRgdvoconnector\Command\FullEventsUpdateCommandController::class,
     'updateCommand',
     $eventHandler,
     'updateCommand'
 );
 
 $signalSlotDispatcher->connect(
-    \RG\CalendarizeRgdvoconnector\Command\CurrentEventsUpdateCommandController::class,
+    \RGU\CalendarizeRgdvoconnector\Command\CurrentEventsUpdateCommandController::class,
     'importCommand',
     $eventHandler,
     'importCommand'
 );
 $signalSlotDispatcher->connect(
-    \RG\CalendarizeRgdvoconnector\Command\CurrentEventsUpdateCommandController::class,
+    \RGU\CalendarizeRgdvoconnector\Command\CurrentEventsUpdateCommandController::class,
     'deleteCommand',
     $eventHandler,
     'deleteCommand'
 );
 $signalSlotDispatcher->connect(
-    \RG\CalendarizeRgdvoconnector\Command\CurrentEventsUpdateCommandController::class,
+    \RGU\CalendarizeRgdvoconnector\Command\CurrentEventsUpdateCommandController::class,
     'updateCommand',
     $eventHandler,
     'updateCommand'
