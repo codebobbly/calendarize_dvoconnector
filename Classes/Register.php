@@ -44,7 +44,7 @@ class Register
             'title'             => 'Dvoconnector Event',
             'modelName'         => \RGU\CalendarizeDvoconnector\Domain\Model\Event::class,
             'partialIdentifier' => 'Dvoconnector',
-            'tableName'         => 'tx_calendarizeDvoconnector_domain_model_event',
+            'tableName'         => 'tx_calendarizedvoconnector_domain_model_event',
             'required'          => false,
         ];
     }

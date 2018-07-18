@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = [
         'depends' => [
             'typo3'       => '7.6.0-*',
             'calendarize' => '3.1.0-0.0.0',
-            'Dvoconnector' => '1.0.0-*',
+            'dvoconnector' => '1.0.0-*',
         ],
     ],
 ];

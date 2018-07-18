@@ -14,7 +14,7 @@ if (!defined('TYPO3_MODE')) {
 
 \HDNET\Autoloader\Loader::extLocalconf(
     'RG',
-    'calendarize_Dvoconnector',
+    'calendarize_dvoconnector',
     \RGU\CalendarizeDvoconnector\Register::getAutoloaderConfiguration()
 );
 \HDNET\Calendarize\Register::extLocalconf(\RGU\CalendarizeDvoconnector\Register::getConfiguration());

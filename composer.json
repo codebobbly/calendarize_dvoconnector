@@ -1,5 +1,5 @@
 {
-  "name": "RGU/calendarize-Dvoconnector",
+  "name": "RGU/calendarize-dvoconnector",
   "version": "1.0.1",
   "type": "typo3-cms-extension",
   "description": "Integrate Dvoconnector with Calendarize",
