@@ -3,10 +3,10 @@
  * $EM_CONF
  *
  * @category   Extension
- * @author     rguttroff.de
+ * @author     codebobbly
  */
 $EM_CONF[$_EXTKEY] = [
-    'title'            => 'Calendarize fir DVO Events',
+    'title'            => 'Calendarize for DVO Events',
     'description'      => 'Integrate Dvoconnector with Calendarize',
     'category'         => 'fe',
     'version'          => '1.0.1',
