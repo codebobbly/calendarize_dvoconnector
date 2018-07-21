@@ -1,20 +1,29 @@
-# This file is for unifying the coding style for different editors and IDEs
-# editorconfig.org
+# EditorConfig is awesome: http://EditorConfig.org
 
-[*]
-end_of_line = lf
+# top-most EditorConfig file
+root = true
 charset = utf-8
 trim_trailing_whitespace = true
-insert_final_newline = true
 
-[**.css]
-indent_style = tab
-indent_size = 2
-
-[**.php]
+[*]
 indent_style = space
 indent_size = 4
 
-[**.html]
-indent_style = tab
+[*.php]
+indent_style = space
+
+[{setup,constants,ext_conf_template}.txt]
+indent_style = space
+
+[*.json]
+indent_style = space
 indent_size = 2
+
+[*.html]
+indent_style = tab
+
+[*.rst]
+indent_style = tab
+
+[Makefile]
+indent_style = tab
