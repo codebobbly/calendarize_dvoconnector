@@ -41,7 +41,7 @@
     }
   },
   "replace": {
-    "calendarize-dvoconnector": "self.version",
+    "rgu/calendarize-dvoconnector": "self.version",
     "typo3-ter/calendarize-dvoconnector": "self.version"
   },
   "config": {
